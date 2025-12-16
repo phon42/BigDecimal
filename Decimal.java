@@ -40,6 +40,38 @@ public class Decimal extends Number implements Comparable<Decimal> {
         return String.format("[%s, E%s]", intVal.toString(),
             scale.toString());
     }
+    @Override
+    public double doubleValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    @Override
+    public float floatValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    @Override
+    public int intValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    @Override
+    public long longValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    @Override
+    public int compareTo(Decimal o) {
+        int result;
+
+        result = this.scale.compareTo(o.scale);
+        if (result != 0) {
+            return result;
+        }
+
+        return this.intVal.compareTo(o.intVal);
+    }
+    // Basic accessors
     public BigInteger unscaledValue() {
         return intVal;
     }
