@@ -20,7 +20,8 @@ public class Decimal extends Number implements Comparable<Decimal> {
         setIntVal(intVal);
     }
 
-    // getIntVal and getScale purposefully removed
+    // getIntVal and getScale purposefully removed, use unscaledValue and scale
+    //     instead, respectively
     private void setIntVal(BigInteger intVal) {
         if (intVal == null) {
             throw new IllegalArgumentException("intVal is null");
@@ -34,6 +35,11 @@ public class Decimal extends Number implements Comparable<Decimal> {
         this.scale = scale;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s, E%s]", intVal.toString(),
+            scale.toString());
+    }
     public BigInteger unscaledValue() {
         return intVal;
     }
