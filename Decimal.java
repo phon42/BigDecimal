@@ -6,6 +6,7 @@ public class Decimal extends Number implements Comparable<Decimal> {
     private BigInteger scale;
 
     // Reference properties
+    // Public reference properties
     public static final Decimal ZERO =
         new Decimal(BigInteger.ZERO, BigInteger.ZERO);
     public static final Decimal ONE =
@@ -14,10 +15,14 @@ public class Decimal extends Number implements Comparable<Decimal> {
         new Decimal(BigInteger.TWO, BigInteger.ZERO);
     public static final Decimal TEN =
         new Decimal(BigInteger.TEN, BigInteger.ZERO);
-
+    // Private reference properties
     public Decimal(BigInteger intVal, BigInteger scale) {
         setScale(scale);
         setIntVal(intVal);
+    }
+    private Decimal(Decimal decimal) {
+        setScale(decimal.scale);
+        setIntVal(decimal.intVal);
     }
 
     // getIntVal and getScale purposefully removed, use unscaledValue and scale
@@ -35,6 +40,30 @@ public class Decimal extends Number implements Comparable<Decimal> {
         this.scale = scale;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (! (obj instanceof Decimal)) {
+            return false;
+        }
+
+        return equals((Decimal) obj);
+    }
+    public boolean equals(Decimal decimal) {
+        if (decimal == null) {
+            return false;
+        }
+        if (! decimal.scale.equals(this.scale)) {
+            return false;
+        }
+        if (! decimal.intVal.equals(this.intVal)) {
+            return false;
+        }
+
+        return true;
+    }
     @Override
     public String toString() {
         return String.format("[%s, E%s]", intVal.toString(),
@@ -77,5 +106,31 @@ public class Decimal extends Number implements Comparable<Decimal> {
     }
     public BigInteger scale() {
         return scale;
+    }
+    // BigDecimal-esque methods
+    public Decimal multiply(Decimal multiplicand) {
+        Decimal result;
+        BigInteger multiplicandFlat;
+        BigInteger multiplicandScale;
+
+        if (multiplicand == null) {
+            throw new IllegalArgumentException();
+        }
+        result = new Decimal(this);
+        multiplicandFlat = multiplicand.intVal;
+        multiplicandScale = multiplicand.scale;
+        result.setScale(result.scale.multiply(multiplicandScale));
+        result.setIntVal(result.intVal.multiply(multiplicandFlat));
+
+        return result;
+    }
+    // Helper methods
+    private BigInteger adjustScale(BigInteger newIntVal) {
+        if (newIntVal.signum() == 0) {
+            return newIntVal;
+        }
+        // TODO: fill out
+
+        return newIntVal;
     }
 }
